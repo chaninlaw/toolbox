@@ -1,10 +1,13 @@
 APP_NAME = toolbox
-CMD_DIR = ./cmd/$(APP_NAME)
+CMD_DIR = .
 
 .PHONY: dev test
 
 dev:
-	go run ./cmd/toolbox/
+	go run .
 
 test:
 	go test ./...
+
+build:
+	go build -o ./bin/toolbox .
