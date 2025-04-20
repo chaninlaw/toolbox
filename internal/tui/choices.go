@@ -69,7 +69,7 @@ func choicesView(m model) string {
 
 	s += subtleStyle.Render("j/k, up/down: select") + dotStyle +
 		subtleStyle.Render("enter, space: choose") + dotStyle +
-		subtleStyle.Render("q: quit")
+		subtleStyle.Render("ctrl+c: quit")
 
 	return s
 }
