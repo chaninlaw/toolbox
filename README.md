@@ -11,7 +11,7 @@ This Go Toolbox provides a set of utilities to streamline the development proces
 To use the toolbox, you need to have Go installed on your machine. You can install the toolbox by running:
 
 ```
-go install github.com/chaninlaw/toolbox
+go install github.com/chaninlaw/toolbox@latest
 ```
 
 ## Usage
@@ -19,7 +19,7 @@ go install github.com/chaninlaw/toolbox
 After installing, you can use the toolbox commands from your terminal. To initialize a new Go project, run:
 
 ```
-go run github.com/chaninlaw/toolbox cmd/toolbox
+toolbox
 ```
 
 This command will prompt you for the project name and create the necessary files and directories for your new Go project.
