@@ -1,10 +1,9 @@
 APP_NAME = {{.ProjectName}}
-CMD_DIR = ./cmd/$(APP_NAME)
 
 .PHONY: dev test build run tidy fmt lint
 
 dev:
-	{{ if .LiveReload }} air -c .air.toml {{ else }} go run ./cmd/{{.ProjectName}}/ {{ end }}
+	{{ if .LiveReload }} air -c .air.toml {{ else }} go run . {{ end }}
 
 test:
 	go test ./...

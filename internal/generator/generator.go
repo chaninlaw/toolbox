@@ -25,12 +25,6 @@ func Generate(options Options) error {
 		return err
 	}
 
-	// Creating cmd directory...
-	err = os.MkdirAll(filepath.Join(dir, "cmd"), os.ModePerm)
-	if err != nil {
-		logs.Error("failed to create cmd directory: %v", err)
-		return err
-	}
 	// Creating internal directory...
 	err = os.MkdirAll(filepath.Join(dir, "internal"), os.ModePerm)
 	if err != nil {
@@ -45,7 +39,7 @@ func Generate(options Options) error {
 	}
 
 	// Creating main.go file...
-	filePath := filepath.Join(filepath.Join(dir, "cmd"), "main.go")
+	filePath := filepath.Join(dir, "main.go")
 	tmplPath := utils.AbsolutePath("boilerplate.go.tmpl")
 	if err := createFileAndParseTemplate(filePath, tmplPath, options); err != nil {
 		logs.Error("failed to create main.go file: %v", err)
