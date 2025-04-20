@@ -1,7 +1,7 @@
 package main
 
-import "github.com/chaninlaw/toolbox/cmd"
+import "github.com/chaninlaw/toolbox/cmd/toolbox"
 
 func main() {
-	cmd.Execute()
+	toolbox.Execute()
 }

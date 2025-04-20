@@ -1,4 +1,4 @@
-package cmd
+package toolbox
 
 import (
 	"fmt"
@@ -12,7 +12,7 @@ import (
 
 var version = "v0.1.0"
 
-var rootCmd = &cobra.Command{
+var cmd = &cobra.Command{
 	Use:   "toolbox",
 	Short: "toolbox - code generator CLI",
 	Long: `toolbox - code generator CLI
@@ -27,8 +27,8 @@ A tool for generating project boilerplate and utilities.`,
 }
 
 func Execute() {
-	rootCmd.Version = version
-	if err := rootCmd.Execute(); err != nil {
+	cmd.Version = version
+	if err := cmd.Execute(); err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}
