@@ -16,7 +16,9 @@ type Options struct {
 
 // Generate creates a new project structure
 func Generate(options Options) error {
-	dir := filepath.Join(options.ProjectName)
+	// Support custom path, but use last element as project name
+	dir := filepath.Clean(options.ProjectName)
+	projectName := filepath.Base(dir)
 
 	// Generating folder...
 	err := os.MkdirAll(dir, os.ModePerm)
@@ -41,6 +43,7 @@ func Generate(options Options) error {
 	// Creating main.go file...
 	filePath := filepath.Join(dir, "main.go")
 	tmplPath := utils.AbsolutePath("boilerplate.go.tmpl")
+	options.ProjectName = projectName // Use only the last element for templates and go mod
 	if err := createFileAndParseTemplate(filePath, tmplPath, options); err != nil {
 		logs.Error("failed to create main.go file: %v", err)
 		return err
@@ -63,7 +66,7 @@ func Generate(options Options) error {
 	}
 
 	// Executing go mod init...
-	if err := utils.ExecCommandInDir(dir, "go", "mod", "init", options.ProjectName); err != nil {
+	if err := utils.ExecCommandInDir(dir, "go", "mod", "init", projectName); err != nil {
 		logs.Error("failed to execute go mod init: %v", err)
 		return err
 	}
