@@ -3,7 +3,6 @@ package utils
 import (
 	"fmt"
 	"io"
-	"os"
 	"os/exec"
 	"runtime"
 )
@@ -20,7 +19,6 @@ func NewError(e interface{}) error {
 func ExecCommandInDir(dir string, command string, args ...string) error {
 	cmd := exec.Command(command, args...)
 	cmd.Dir = dir
-	cmd.Stdout = os.Stdout
 	var stderrBuf []byte
 	stderrPipe, err := cmd.StderrPipe()
 	if err != nil {
