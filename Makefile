@@ -1,5 +1,4 @@
 APP_NAME = toolbox
-CMD_DIR = .
 
 .PHONY: dev test
 
@@ -10,4 +9,4 @@ test:
 	go test ./...
 
 build:
-	go build -o ./bin/toolbox .
+	go build -o ./bin/$(APP_NAME) .
