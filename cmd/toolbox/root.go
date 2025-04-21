@@ -21,7 +21,7 @@ A tool for generating project boilerplate and utilities.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		p := tea.NewProgram(tui.InitialModel())
 		if _, err := p.Run(); err != nil {
-			logs.Fatal("Oops, Could not start the program: %v", err)
+			logs.Error.Fatalf("Oops, Could not start the program: %v\n", err)
 		}
 	},
 }

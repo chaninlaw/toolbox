@@ -1,37 +1,39 @@
 package logs
 
 import (
+	"io"
 	"log"
 	"os"
 )
 
 var (
-	infoLogger  *log.Logger
-	warnLogger  *log.Logger
-	errorLogger *log.Logger
-	fatalLogger *log.Logger
+	Info  *log.Logger
+	Warn  *log.Logger
+	Error *log.Logger
+	Debug *log.Logger
 )
 
 func init() {
-	infoLogger = log.New(os.Stdout, "[INFO] ", log.Ldate|log.Ltime|log.Lshortfile)
-	warnLogger = log.New(os.Stdout, "[WARN] ", log.Ldate|log.Ltime|log.Lshortfile)
-	errorLogger = log.New(os.Stderr, "[ERROR] ", log.Ldate|log.Ltime|log.Lshortfile)
-	fatalLogger = log.New(os.Stderr, "[FATAL] ", log.Ldate|log.Ltime|log.Lshortfile)
-}
+	if err := os.MkdirAll("log", os.ModePerm); err != nil {
+		log.Printf("error during create log directory")
+		os.Exit(1)
+	}
 
-func Info(msg string, args ...any) {
-	infoLogger.Printf(msg, args...)
-}
+	logFile, err := os.OpenFile("log/app.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, os.ModePerm)
+	if err != nil {
+		log.Printf("error during open app.log file")
+		os.Exit(1)
+	}
 
-func Warn(msg string, args ...any) {
-	warnLogger.Printf(msg, args...)
-}
+	infoWriter := io.MultiWriter(os.Stdout, logFile)
+	warnWriter := io.MultiWriter(os.Stdout, logFile)
+	errorWriter := io.MultiWriter(os.Stderr, logFile)
+	debugWriter := io.MultiWriter(os.Stderr, logFile)
 
-func Error(msg string, args ...any) {
-	errorLogger.Printf(msg, args...)
-}
+	flags := log.Ldate | log.Ltime | log.Lshortfile
 
-func Fatal(msg string, args ...any) {
-	fatalLogger.Printf(msg, args...)
-	os.Exit(1)
+	Info = log.New(infoWriter, "[INFO] ", flags)
+	Warn = log.New(warnWriter, "[WARN] ", flags)
+	Error = log.New(errorWriter, "[ERROR] ", flags)
+	Debug = log.New(debugWriter, "[DEBUG] ", flags)
 }
