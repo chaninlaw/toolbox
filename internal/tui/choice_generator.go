@@ -22,11 +22,19 @@ const (
 	liveReloadFocus = 1
 )
 
+type ErrMsg struct {
+	message string
+}
+
+func (e ErrMsg) Error() string {
+	return destructiveStyle.Render("Failed to generate project: " + e.message)
+}
+
 // Generator state represents the state of the generator
 type generatorState struct {
 	projectName textinput.Model
 	spinner     spinner.Model
-	errMsg      string
+	errMsg      ErrMsg
 	state       int
 	progressMsg string
 	focusIndex  int  // 0 = text input, 1 = live reload
@@ -65,13 +73,17 @@ func initializeGenerator() generatorState {
 	s.Spinner = spinner.Dot
 	s.Style = spinnerStyle
 
-	return generatorState{
+	state := generatorState{
 		projectName: ti,
 		state:       idle,
 		spinner:     s,
 		liveReload:  true, // default true
 		focusIndex:  0,    // start with text input focused
+		errMsg:      ErrMsg{},
+		progressMsg: "",
 	}
+
+	return state
 }
 
 // --- Update ---
@@ -174,9 +186,8 @@ func updateGeneratorGenerating(msg tea.Msg, m model) (model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case projectGeneratedMsg:
 		if msg.err != nil {
-			m.generator.errMsg = destructiveStyle.Render("Failed to generate project: " + msg.err.Error())
-			m.generator.state = idle
-			return m, nil
+			m.generator.errMsg = ErrMsg{message: msg.err.Error()}
+			return m, tea.Quit
 		}
 		m.generator.state = done
 		return m, nil
@@ -229,8 +240,8 @@ func viewConfirming(m model) string {
 
 func viewGenerating(m model) string {
 	var s string
-	if m.generator.errMsg != "" {
-		return m.generator.errMsg
+	if m.generator.errMsg.message != "" {
+		return m.generator.errMsg.Error()
 	}
 	s += fmt.Sprintf("\n%s %s", m.generator.spinner.View(), subtleStyle.Render(m.generator.progressMsg))
 	return s
