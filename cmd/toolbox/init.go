@@ -1,8 +1,9 @@
 package toolbox
 
 import (
+	"log"
+
 	tui "github.com/chaninlaw/toolbox/internal/tui"
-	"github.com/chaninlaw/toolbox/pkgs/logs"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/spf13/cobra"
 )
@@ -15,7 +16,7 @@ func init() {
 		Run: func(cmd *cobra.Command, args []string) {
 			p := tea.NewProgram(tui.InitialGeneratorModel())
 			if _, err := p.Run(); err != nil {
-				logs.Fatal("Oops, Could not start the program: %v", err)
+				log.Fatalf("Oops, Could not start the program: %v", err)
 			}
 		},
 	})

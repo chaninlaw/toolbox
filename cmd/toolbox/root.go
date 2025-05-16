@@ -1,11 +1,9 @@
 package toolbox
 
 import (
-	"fmt"
-	"os"
+	"log"
 
 	tui "github.com/chaninlaw/toolbox/internal/tui"
-	"github.com/chaninlaw/toolbox/pkgs/logs"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/spf13/cobra"
 )
@@ -21,7 +19,7 @@ A tool for generating project boilerplate and utilities.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		p := tea.NewProgram(tui.InitialModel())
 		if _, err := p.Run(); err != nil {
-			logs.Error.Fatalf("Oops, Could not start the program: %v\n", err)
+			log.Fatalf("Oops, Could not start the program: %v\n", err)
 		}
 	},
 	Version: version,
@@ -29,7 +27,6 @@ A tool for generating project boilerplate and utilities.`,
 
 func Execute() {
 	if err := cmd.Execute(); err != nil {
-		fmt.Println(err)
-		os.Exit(1)
+		log.Fatalf("Oops, Could not execute the command: %v\n", err)
 	}
 }
