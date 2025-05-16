@@ -1,11 +1,11 @@
 package generator
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
 	"text/template"
 
-	"github.com/chaninlaw/toolbox/pkgs/logs"
 	"github.com/chaninlaw/toolbox/pkgs/utils"
 )
 
@@ -23,20 +23,20 @@ func Generate(options Options) error {
 	// Generating folder...
 	err := os.MkdirAll(dir, os.ModePerm)
 	if err != nil {
-		logs.Error.Printf("failed to create directory: %v\n", err)
+		fmt.Printf("failed to create directory: %v\n", err)
 		return err
 	}
 
 	// Creating internal directory...
 	err = os.MkdirAll(filepath.Join(dir, "internal"), os.ModePerm)
 	if err != nil {
-		logs.Error.Printf("failed to create internal directory: %v\n", err)
+		fmt.Printf("failed to create internal directory: %v\n", err)
 		return err
 	}
 	// Creating pkgs directory...
 	err = os.MkdirAll(filepath.Join(dir, "pkgs"), os.ModePerm)
 	if err != nil {
-		logs.Error.Printf("failed to create pkg directory: %v\n", err)
+		fmt.Printf("failed to create pkg directory: %v\n", err)
 		return err
 	}
 
@@ -45,7 +45,7 @@ func Generate(options Options) error {
 	tmplPath := utils.AbsolutePath("boilerplate.go.tmpl")
 	options.ProjectName = projectName // Use only the last element for templates and go mod
 	if err := createFileAndParseTemplate(filePath, tmplPath, options); err != nil {
-		logs.Error.Printf("failed to create main.go file: %v\n", err)
+		fmt.Printf("failed to create main.go file: %v\n", err)
 		return err
 	}
 
@@ -53,7 +53,7 @@ func Generate(options Options) error {
 	filePath = filepath.Join(dir, "README.md")
 	tmplPath = utils.AbsolutePath("readme.go.tmpl")
 	if err := createFileAndParseTemplate(filePath, tmplPath, options); err != nil {
-		logs.Error.Printf("failed to create README.md file: %v\n", err)
+		fmt.Printf("failed to create README.md file: %v\n", err)
 		return err
 	}
 
@@ -61,19 +61,19 @@ func Generate(options Options) error {
 	filePath = filepath.Join(dir, "Makefile")
 	tmplPath = utils.AbsolutePath("makefile.go.tmpl")
 	if err := createFileAndParseTemplate(filePath, tmplPath, options); err != nil {
-		logs.Error.Printf("failed to create Makefile: %v\n", err)
+		fmt.Printf("failed to create Makefile: %v\n", err)
 		return err
 	}
 
 	// Executing go mod init...
 	if err := utils.ExecCommandInDir(dir, "go", "mod", "init", projectName); err != nil {
-		logs.Error.Printf("failed to execute go mod init: %v\n", err)
+		fmt.Printf("failed to execute go mod init: %v\n", err)
 		return err
 	}
 
 	// Initializing git...
 	if err := utils.ExecCommandInDir(dir, "git", "init"); err != nil {
-		logs.Error.Printf("failed to initialize git: %v\n", err)
+		fmt.Printf("failed to initialize git: %v\n", err)
 		return err
 	}
 
@@ -81,22 +81,22 @@ func Generate(options Options) error {
 	filePath = filepath.Join(dir, ".gitignore")
 	tmplPath = utils.AbsolutePath("gitignore.go.tmpl")
 	if err := createFileAndParseTemplate(filePath, tmplPath, options); err != nil {
-		logs.Error.Printf("failed to create .gitignore file: %v\n", err)
+		fmt.Printf("failed to create .gitignore file: %v\n", err)
 		return err
 	}
 
 	if options.LiveReload {
 		// Checking air -v command...
 		if err := utils.ExecCommandInDir(dir, "air", "-v"); err != nil {
-			logs.Warn.Println("air is not installed, please install it first")
-			logs.Warn.Println("you can install it by running: go install github.com/air-verse/air@latest")
+			fmt.Println("air is not installed, please install it first")
+			fmt.Println("you can install it by running: go install github.com/air-verse/air@latest")
 		}
 
 		// Creating air.toml file...
 		filePath = filepath.Join(dir, ".air.toml")
 		tmplPath = utils.AbsolutePath("air.go.tmpl")
 		if err := createFileAndParseTemplate(filePath, tmplPath, options); err != nil {
-			logs.Error.Printf("failed to create .air.toml file: %v", err)
+			fmt.Printf("failed to create .air.toml file: %v", err)
 			return err
 		}
 	}
@@ -107,7 +107,7 @@ func Generate(options Options) error {
 func createFileAndParseTemplate(filePath, tmplPath string, options Options) error {
 	file, err := os.Create(filePath)
 	if err != nil {
-		logs.Error.Printf("failed to create file: %v\n", err)
+		fmt.Printf("failed to create file: %v\n", err)
 		return err
 	}
 	defer file.Close()
@@ -115,7 +115,7 @@ func createFileAndParseTemplate(filePath, tmplPath string, options Options) erro
 	// Parsing and executin
 	tmpl, err := template.ParseFiles(tmplPath)
 	if err != nil {
-		logs.Error.Printf("failed to parse template: %v\n", err)
+		fmt.Printf("failed to parse template: %v\n", err)
 		return err
 	}
 	// Writing template to file
