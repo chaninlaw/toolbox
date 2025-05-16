@@ -4,7 +4,7 @@ This Go Toolbox provides a set of utilities to streamline the development proces
 
 ## Features
 
-- **Initialize Project**: Create a new Go project with a predefined structure and boilerplate code.
+- **Initialize Project**: Initialize a new Go project with a predefined structure and boilerplate code.
 
 ## Installation
 
