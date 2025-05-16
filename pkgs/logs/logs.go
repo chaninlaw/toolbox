@@ -25,15 +25,13 @@ func init() {
 		os.Exit(1)
 	}
 
-	infoWriter := io.MultiWriter(os.Stdout, logFile)
-	warnWriter := io.MultiWriter(os.Stdout, logFile)
-	errorWriter := io.MultiWriter(os.Stderr, logFile)
-	debugWriter := io.MultiWriter(os.Stderr, logFile)
+	stdoutWriter := io.MultiWriter(os.Stdout, logFile)
+	stderrWriter := io.MultiWriter(os.Stderr, logFile)
 
 	flags := log.Ldate | log.Ltime | log.Lshortfile
 
-	Info = log.New(infoWriter, "[INFO] ", flags)
-	Warn = log.New(warnWriter, "[WARN] ", flags)
-	Error = log.New(errorWriter, "[ERROR] ", flags)
-	Debug = log.New(debugWriter, "[DEBUG] ", flags)
+	Debug = log.New(stdoutWriter, "[DEBUG] ", flags)
+	Info = log.New(stdoutWriter, "[INFO] ", flags)
+	Warn = log.New(stdoutWriter, "[WARN] ", flags)
+	Error = log.New(stderrWriter, "[ERROR] ", flags)
 }
