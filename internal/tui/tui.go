@@ -10,10 +10,20 @@ type model struct {
 	isQuit    bool
 }
 
+// InitialModel to start the program with the choices
 func InitialModel() model {
 	return model{
 		isQuit:    false,
 		choice:    initializeChoices(),
+		generator: initializeGenerator(),
+	}
+}
+
+// InitialGeneratorModel to allow skipping choices and go directly to generator
+func InitialGeneratorModel() model {
+	return model{
+		isQuit:    false,
+		choice:    choiceState{cursor: 1, chosen: generatorLabel},
 		generator: initializeGenerator(),
 	}
 }
@@ -53,6 +63,8 @@ func (m model) View() string {
 	var s string
 	if m.choice.chosen == "" {
 		s = choicesView(m)
+	} else if m.choice.chosen == generatorLabel {
+		s = generatorView(m)
 	} else {
 		s = choices[m.choice.cursor-1].View(m)
 	}

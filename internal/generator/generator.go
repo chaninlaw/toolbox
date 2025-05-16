@@ -89,7 +89,7 @@ func Generate(options Options) error {
 		// Checking air -v command...
 		if err := utils.ExecCommandInDir(dir, "air", "-v"); err != nil {
 			logs.Warn("air is not installed, please install it first")
-			logs.Warn("you can install it by running: go install github.com/cosmtrek/air@latest")
+			logs.Warn("you can install it by running: go install github.com/air-verse/air@latest")
 		}
 
 		// Creating air.toml file...

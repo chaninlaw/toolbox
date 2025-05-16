@@ -10,12 +10,12 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var version = "v0.1.2"
+const version = "v0.1.3"
 
 var cmd = &cobra.Command{
 	Use:   "toolbox",
 	Short: "toolbox - code generator CLI",
-	Long: `toolbox - code generator CLI
+	Long: `toolbox - code generator CLI,
 
 A tool for generating project boilerplate and utilities.`,
 	Run: func(cmd *cobra.Command, args []string) {
@@ -24,10 +24,10 @@ A tool for generating project boilerplate and utilities.`,
 			logs.Fatal("Oops, Could not start the program: %v", err)
 		}
 	},
+	Version: version,
 }
 
 func Execute() {
-	cmd.Version = version
 	if err := cmd.Execute(); err != nil {
 		fmt.Println(err)
 		os.Exit(1)
